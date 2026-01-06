@@ -15,33 +15,6 @@ A Spring Boot–based Invoice Generator application that provides REST APIs to c
 
 ---
 
-##  Project Structure
-
-```
-invoice-generator
-│── src/main/java
-│   └── com.techlambdas.invoice_generator
-│       ├── controller
-│       │   └── InvoiceController.java
-│       ├── service
-│       │   └── InvoiceService.java
-│       ├── repository
-│       │   └── InvoiceRepository.java
-│       ├── model
-│       │   └── Invoice.java
-│       ├── exception
-│       │   └── InvoiceNotFoundException.java
-│       └── InvoiceGeneratorApplication.java
-│
-│── src/main/resources
-│   ├── application.properties
-│
-│── pom.xml
-│── README.md
-```
-
----
-
 ## Screenshots
 
 ### Create Invoice
