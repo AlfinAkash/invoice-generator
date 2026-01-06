@@ -36,11 +36,110 @@ A Spring Boot–based Invoice Generator application that provides REST APIs to c
 ![Get Invoice Pdf By Id](images/GetInvoicePdfById.png)
 
 
-##  Configuration
+# Invoice Service API
+## Create Invoice
 
-Update **`application.properties`** with your MongoDB connection details:
+- **Method:** `POST`  
+- **URL:** `http://localhost:8080/api/v1/invoices`
 
-```properties
+### Request Headers
+
+- `Content-Type: application/json`
+
+### Request Body
+
+```json
+{
+  "company": {
+    "name": "TechLambdas Pvt Ltd",
+    "address": "120, Market Rd, opposite to State Bank of India, Sevvalpatti, Kovilpatti, Tamil Nadu 628501",
+    "gstNumber": "GST123456"
+  },
+  "customer": {
+    "name": "AlfinAkash A",
+    "email": "alfinakash2001@gmail.com",
+    "address": "Tirunelveli"
+  },
+  "items": [
+    {
+      "itemName": "Laptop",
+      "quantity": 2,
+      "rate": 50000,
+      "taxPercentage": 18
+    },
+    {
+      "itemName": "Mouse",
+      "quantity": 5,
+      "rate": 500,
+      "taxPercentage": 18
+    }
+  ]
+}
+```
+## GetAll Invoice
+
+- **Method:** `GET`  
+- **URL:** `http://localhost:8080/api/v1/invoices`
+
+
+## Get Invoice ById
+
+- **Method:** `GET`  
+- **URL:** `http://localhost:8080/api/v1/invoices/{id}`
+
+
+## Update Invoice ById
+
+- **Method:** `PUT`  
+- **URL:** `http://localhost:8080/api/v1/invoices/{id}`
+
+### Request Body
+
+```json
+{
+  "company": {
+    "name": "TechLambdas Pvt Ltd",
+    "address": "120, Market Rd, opposite to State Bank of India, Sevvalpatti, Kovilpatti, Tamil Nadu 628501",
+    "gstNumber": "GST123456"
+  },
+  "customer": {
+    "name": "AlfinAkash A",
+    "email": "alfinakash2001@gmail.com",
+    "address": "Tirunelveli"
+  },
+  "items": [
+    {
+      "itemName": "Laptop",
+      "quantity": 2,
+      "rate": 50000,
+      "taxPercentage": 18
+    },
+    {
+      "itemName": "Mouse",
+      "quantity": 5,
+      "rate": 500,
+      "taxPercentage": 18
+    }
+  ]
+}
+```
+
+## Delete Invoice ById
+
+- **Method:** `DELETE`  
+- **URL:** `http://localhost:8080/api/v1/invoices/{id}`
+
+---
+## Get Invoice Pdf
+
+- **Method:** `GET`  
+- **URL:** `http://localhost:8080/api/v1/invoices/{id}/pdf`
+
+
+
+## Configuration
+#### Application Properties
+```
 spring.application.name=invoice-generator
 server.port=8080
 spring.data.mongodb.uri=mongodb://localhost:27017
@@ -58,7 +157,7 @@ invoice.pdf.author=TechLambdas Pvt Ltd
 
 ---
 
-## ▶️ Running the Application
+## Running the Application
 
 ### Prerequisites
 
@@ -82,5 +181,7 @@ http://localhost:8080
 
 ## 👤 Author
 
-**AlfinAkash**
+**[AlfinAkash](https://github.com/AlfinAkash)**  
+
+
 
