@@ -1,4 +1,7 @@
+D:\invoice\invoice-generator\src\main\java\com\techlambdas\invoice_generator\config\CorsConfig.java
+D:\invoice\invoice-generator\src\main\java\com\techlambdas\invoice_generator\config\MongoConfig.java
 D:\invoice\invoice-generator\src\main\java\com\techlambdas\invoice_generator\controller\InvoiceController.java
+D:\invoice\invoice-generator\src\main\java\com\techlambdas\invoice_generator\controller\rootController.java
 D:\invoice\invoice-generator\src\main\java\com\techlambdas\invoice_generator\dto\InvoiceRequest.java
 D:\invoice\invoice-generator\src\main\java\com\techlambdas\invoice_generator\dto\InvoiceResponse.java
 D:\invoice\invoice-generator\src\main\java\com\techlambdas\invoice_generator\exception\GlobalExceptionHandler.java

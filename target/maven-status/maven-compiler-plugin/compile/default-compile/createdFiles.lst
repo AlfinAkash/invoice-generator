@@ -1,8 +1,11 @@
 com\techlambdas\invoice_generator\InvoiceGeneratorApplication.class
+com\techlambdas\invoice_generator\controller\rootController.class
+com\techlambdas\invoice_generator\config\MongoConfig.class
 com\techlambdas\invoice_generator\model\InvoiceItem.class
 com\techlambdas\invoice_generator\controller\InvoiceController.class
 com\techlambdas\invoice_generator\model\Invoice.class
 com\techlambdas\invoice_generator\util\InvoicePdfGenerator.class
+com\techlambdas\invoice_generator\config\CorsConfig.class
 com\techlambdas\invoice_generator\dto\InvoiceRequest.class
 com\techlambdas\invoice_generator\dto\InvoiceResponse.class
 com\techlambdas\invoice_generator\model\Company.class

@@ -4,18 +4,19 @@ import com.techlambdas.invoice_generator.dto.InvoiceRequest;
 import com.techlambdas.invoice_generator.model.Invoice;
 import com.techlambdas.invoice_generator.service.InvoiceService;
 import com.techlambdas.invoice_generator.util.InvoicePdfGenerator;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/invoices")
 public class InvoiceController {
 
-    @Autowired
-    private InvoiceService invoiceService;
+    private final InvoiceService invoiceService;
 
     @PostMapping
     public ResponseEntity<Invoice> createInvoice(
@@ -45,9 +46,9 @@ public class InvoiceController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
+    public ResponseEntity<String> deleteInvoice(@PathVariable String id) {
         invoiceService.deleteInvoice(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Invoice deleted successfully");
     }
 
     @GetMapping("/{id}/pdf")

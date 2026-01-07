@@ -4,21 +4,17 @@ import com.techlambdas.invoice_generator.dto.InvoiceRequest;
 import com.techlambdas.invoice_generator.exception.InvoiceNotFoundException;
 import com.techlambdas.invoice_generator.model.Invoice;
 import com.techlambdas.invoice_generator.repository.InvoiceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
-
-    @Autowired
-    public InvoiceService(InvoiceRepository invoiceRepository) {
-        this.invoiceRepository = invoiceRepository;
-    }
 
     public Invoice createInvoice(InvoiceRequest request) {
 
