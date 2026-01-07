@@ -1,36 +1,37 @@
 package com.techlambdas.invoice_generator.service;
+
 import com.techlambdas.invoice_generator.dto.InvoiceRequest;
-import com.techlambdas.invoice_generator.dto.InvoiceResponse;
 import com.techlambdas.invoice_generator.exception.InvoiceNotFoundException;
 import com.techlambdas.invoice_generator.model.Invoice;
 import com.techlambdas.invoice_generator.repository.InvoiceRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
 
-    public void createInvoice(InvoiceRequest request) {
-        if (request.company() == null) {
-            throw new IllegalArgumentException("Company information is required");
-        }
-        Invoice invoice = buildInvoice(request);
-        invoiceRepository.save(invoice);
+    @Autowired
+    public InvoiceService(InvoiceRepository invoiceRepository) {
+        this.invoiceRepository = invoiceRepository;
     }
 
+    public Invoice createInvoice(InvoiceRequest request) {
 
-    public List<InvoiceResponse> getAllInvoices() {
-        return invoiceRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        if (request.company() == null || request.customer() == null) {
+            throw new RuntimeException("Company and Customer information are required");
+        }
+
+        Invoice invoice = buildInvoice(request);
+        return invoiceRepository.save(invoice);
+    }
+
+    public List<Invoice> getAllInvoices() {
+        return invoiceRepository.findAll();
     }
 
     public Invoice getInvoiceById(String id) {
@@ -38,11 +39,13 @@ public class InvoiceService {
                 .orElseThrow(() -> new InvoiceNotFoundException(id));
     }
 
-    public void updateInvoice(String id, InvoiceRequest request) {
+    public Invoice updateInvoice(String id, InvoiceRequest request) {
         Invoice existing = getInvoiceById(id);
+
         Invoice updated = buildInvoice(request);
         updated.setId(existing.getId());
-        invoiceRepository.save(updated);
+
+        return invoiceRepository.save(updated);
     }
 
     public void deleteInvoice(String id) {
@@ -51,6 +54,7 @@ public class InvoiceService {
     }
 
     private Invoice buildInvoice(InvoiceRequest request) {
+
         double subTotal = request.items().stream()
                 .mapToDouble(i -> i.getQuantity() * i.getRate())
                 .sum();
@@ -69,15 +73,5 @@ public class InvoiceService {
                 .grandTotal(subTotal + taxAmount)
                 .invoiceDate(LocalDate.now())
                 .build();
-    }
-
-    private InvoiceResponse mapToResponse(Invoice invoice) {
-        return new InvoiceResponse(
-                invoice.getId(),
-                invoice.getSubTotal(),
-                invoice.getTaxAmount(),
-                invoice.getGrandTotal(),
-                invoice.getInvoiceDate()
-        );
     }
 }

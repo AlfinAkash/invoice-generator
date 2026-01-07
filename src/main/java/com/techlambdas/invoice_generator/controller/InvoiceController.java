@@ -1,10 +1,10 @@
 package com.techlambdas.invoice_generator.controller;
+
 import com.techlambdas.invoice_generator.dto.InvoiceRequest;
-import com.techlambdas.invoice_generator.dto.InvoiceResponse;
 import com.techlambdas.invoice_generator.model.Invoice;
 import com.techlambdas.invoice_generator.service.InvoiceService;
 import com.techlambdas.invoice_generator.util.InvoicePdfGenerator;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,37 +12,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/invoices")
-@RequiredArgsConstructor
 public class InvoiceController {
 
-    private final InvoiceService invoiceService;
+    @Autowired
+    private InvoiceService invoiceService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createInvoice(@RequestBody InvoiceRequest request) {
-        invoiceService.createInvoice(request);
+    public ResponseEntity<Invoice> createInvoice(
+            @RequestBody InvoiceRequest request) {
+
+        Invoice invoice = invoiceService.createInvoice(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(invoice);
     }
 
     @GetMapping
-    public List<InvoiceResponse> getAllInvoices() {
-        return invoiceService.getAllInvoices();
+    public ResponseEntity<List<Invoice>> getAllInvoices() {
+        return ResponseEntity.ok(invoiceService.getAllInvoices());
     }
 
     @GetMapping("/{id}")
-    public Invoice getInvoiceById(@PathVariable String id) {
-        return invoiceService.getInvoiceById(id);
+    public ResponseEntity<Invoice> getInvoiceById(@PathVariable String id) {
+        return ResponseEntity.ok(invoiceService.getInvoiceById(id));
     }
 
     @PutMapping("/{id}")
-    public void updateInvoice(@PathVariable String id,
-                              @RequestBody InvoiceRequest request) {
-        invoiceService.updateInvoice(id, request);
+    public ResponseEntity<Invoice> updateInvoice(
+            @PathVariable String id,
+            @RequestBody InvoiceRequest request) {
+
+        Invoice invoice = invoiceService.updateInvoice(id, request);
+        return ResponseEntity.ok(invoice);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteInvoice(@PathVariable String id) {
+    public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
         invoiceService.deleteInvoice(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/pdf")
@@ -51,10 +56,9 @@ public class InvoiceController {
         byte[] pdf = InvoicePdfGenerator.generate(invoice);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=invoice.pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=invoice-" + invoice.getId() + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
 }
-
-
