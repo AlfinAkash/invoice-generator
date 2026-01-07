@@ -38,7 +38,7 @@ A Spring Boot–based Invoice Generator application that provides REST APIs to c
 
 ## Invoice PDF
 
-[Invoice Pdf](images/invoice-pdf.pdf)
+[Invoice Pdf](images/Invoice-Pdf.pdf)
 
 # Invoice Tested API
 ## Create Invoice
