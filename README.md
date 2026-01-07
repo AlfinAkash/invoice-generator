@@ -15,6 +15,20 @@ A Spring Boot–based Invoice Generator application that provides REST APIs to c
 
 ---
 
+## Deployment
+
+The backend service is deployed and publicly accessible.
+
+**Base URL (Production):**
+
+```
+https://invoice-generator-backend-service.onrender.com
+```
+
+All API endpoints listed below can be accessed by replacing `http://localhost:8080` with the above base URL.
+
+---
+
 ## Screenshots
 
 ### Create Invoice
