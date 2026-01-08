@@ -52,15 +52,13 @@ http://localhost:8080
 
 ## Deployment
 
-The backend service is deployed and publicly accessible.
+| Property     | Value |
+|-------------|-------|
+| Environment | Production |
+| Status      | Live |
+| Base URL    | https://invoice-generator-backend-service.onrender.com |
 
-**Base URL (Production):**
-
-```
-https://invoice-generator-backend-service.onrender.com
-```
-
-All API endpoints listed below can be accessed by replacing `http://localhost:8080` with the above base URL.
+> Replace `http://localhost:8080` with the production base URL when accessing APIs.
 
 ---
 
