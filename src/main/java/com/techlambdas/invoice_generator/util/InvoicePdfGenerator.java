@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 public class InvoicePdfGenerator {
 
     private static final Font TITLE_FONT =
-            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20);
+            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 22);
 
     private static final Font HEADER_FONT =
             FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11);
@@ -38,7 +38,7 @@ public class InvoicePdfGenerator {
             document.open();
 
             addHeader(document, invoice);
-            addCustomerSection(document, invoice);
+            addCompanyAndCustomerSection(document, invoice);
             addItemsTable(document, invoice);
             addTotalsSection(document, invoice);
             addFooter(document);
@@ -56,53 +56,64 @@ public class InvoicePdfGenerator {
     private static void addHeader(Document document, Invoice invoice)
             throws DocumentException {
 
-        PdfPTable headerTable = new PdfPTable(2);
-        headerTable.setWidthPercentage(100);
-        headerTable.setWidths(new float[]{70, 30});
+        PdfPTable header = new PdfPTable(2);
+        header.setWidthPercentage(100);
+        header.setWidths(new float[]{70, 30});
 
-        Company company = invoice.getCompany();
-        String companyName =
-                company != null && company.getName() != null
-                        ? company.getName()
-                        : "Company Name";
+        Paragraph left = new Paragraph();
+        left.add(new Chunk(
+                invoice.getCompany().getName() + "\n", HEADER_FONT));
+        left.add(new Chunk(
+                invoice.getCompany().getAddress() + "\n", NORMAL_FONT));
+        left.add(new Chunk(
+                "GST: " + invoice.getCompany().getGstNumber(), NORMAL_FONT));
 
-        PdfPCell companyCell = new PdfPCell();
-        companyCell.setBorder(Rectangle.NO_BORDER);
-        companyCell.addElement(new Paragraph(companyName, HEADER_FONT));
-        companyCell.addElement(new Paragraph("Invoice Date: " +
-                (invoice.getInvoiceDate() != null
-                        ? invoice.getInvoiceDate().toString()
-                        : "N/A"), NORMAL_FONT));
+        PdfPCell leftCell = new PdfPCell(left);
+        leftCell.setBorder(Rectangle.NO_BORDER);
 
-        PdfPCell titleCell = new PdfPCell(
+        PdfPCell rightCell = new PdfPCell(
                 new Paragraph("INVOICE", TITLE_FONT));
-        titleCell.setBorder(Rectangle.NO_BORDER);
-        titleCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        rightCell.setBorder(Rectangle.NO_BORDER);
+        rightCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
-        headerTable.addCell(companyCell);
-        headerTable.addCell(titleCell);
+        header.addCell(leftCell);
+        header.addCell(rightCell);
 
-        document.add(headerTable);
+        document.add(header);
         document.add(Chunk.NEWLINE);
     }
 
 
-    private static void addCustomerSection(Document document, Invoice invoice)
+
+    private static void addCompanyAndCustomerSection(Document document, Invoice invoice)
             throws DocumentException {
 
-        String customerName =
-                invoice.getCustomer() != null
-                        && invoice.getCustomer().getName() != null
-                        ? invoice.getCustomer().getName()
-                        : "Customer Name";
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10);
+        table.setWidths(new float[]{50, 50});
 
-        Paragraph customer = new Paragraph();
-        customer.add(new Chunk("Bill To:\n", HEADER_FONT));
-        customer.add(new Chunk(customerName, NORMAL_FONT));
+        PdfPCell billTo = new PdfPCell();
+        billTo.addElement(new Paragraph("Bill To", HEADER_FONT));
+        billTo.addElement(new Paragraph(invoice.getCustomer().getName(), NORMAL_FONT));
+        billTo.addElement(new Paragraph(invoice.getCustomer().getEmail(), NORMAL_FONT));
+        billTo.addElement(new Paragraph(invoice.getCustomer().getAddress(), NORMAL_FONT));
+        billTo.setPadding(8);
 
-        document.add(customer);
+        PdfPCell invoiceInfo = new PdfPCell();
+        invoiceInfo.addElement(new Paragraph("Invoice Date: "
+                + invoice.getInvoiceDate(), NORMAL_FONT));
+        invoiceInfo.addElement(new Paragraph("Invoice ID: "
+                + invoice.getId(), NORMAL_FONT));
+        invoiceInfo.setPadding(8);
+
+        table.addCell(billTo);
+        table.addCell(invoiceInfo);
+
+        document.add(table);
         document.add(Chunk.NEWLINE);
     }
+
 
 
     private static void addItemsTable(Document document, Invoice invoice)
@@ -110,8 +121,8 @@ public class InvoicePdfGenerator {
 
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(100);
-        table.setSpacingBefore(10);
         table.setWidths(new float[]{40, 10, 15, 15, 20});
+        table.setSpacingBefore(10);
 
         addTableHeader(table, "Item");
         addTableHeader(table, "Qty");
@@ -119,17 +130,14 @@ public class InvoicePdfGenerator {
         addTableHeader(table, "Tax %");
         addTableHeader(table, "Total");
 
-        if (invoice.getItems() != null) {
-            for (InvoiceItem item : invoice.getItems()) {
+        for (InvoiceItem item : invoice.getItems()) {
+            double total = item.getQuantity() * item.getRate();
 
-                double total = item.getQuantity() * item.getRate();
-
-                table.addCell(createCell(item.getItemName(), Element.ALIGN_LEFT));
-                table.addCell(createCell(String.valueOf(item.getQuantity()), Element.ALIGN_CENTER));
-                table.addCell(createCell(formatAmount(item.getRate()), Element.ALIGN_RIGHT));
-                table.addCell(createCell(formatAmount(item.getTaxPercentage()), Element.ALIGN_RIGHT));
-                table.addCell(createCell(formatAmount(total), Element.ALIGN_RIGHT));
-            }
+            table.addCell(createCell(item.getItemName(), Element.ALIGN_LEFT));
+            table.addCell(createCell(String.valueOf(item.getQuantity()), Element.ALIGN_CENTER));
+            table.addCell(createCell(format(item.getRate()), Element.ALIGN_RIGHT));
+            table.addCell(createCell(format(item.getTaxPercentage()), Element.ALIGN_RIGHT));
+            table.addCell(createCell(format(total), Element.ALIGN_RIGHT));
         }
 
         document.add(table);
@@ -144,7 +152,7 @@ public class InvoicePdfGenerator {
     }
 
     private static PdfPCell createCell(String text, int alignment) {
-        PdfPCell cell = new PdfPCell(new Phrase(text != null ? text : "N/A", NORMAL_FONT));
+        PdfPCell cell = new PdfPCell(new Phrase(text, NORMAL_FONT));
         cell.setHorizontalAlignment(alignment);
         cell.setPadding(6);
         return cell;
@@ -168,7 +176,7 @@ public class InvoicePdfGenerator {
         label.setPadding(6);
 
         PdfPCell value = new PdfPCell(
-                new Phrase(formatAmount(invoice.getGrandTotal()), TABLE_HEADER_FONT));
+                new Phrase(format(invoice.getGrandTotal()), TABLE_HEADER_FONT));
         value.setHorizontalAlignment(Element.ALIGN_RIGHT);
         value.setPadding(6);
 
@@ -179,27 +187,36 @@ public class InvoicePdfGenerator {
     }
 
     private static void addTotalRow(PdfPTable table, String label, double amount) {
-        table.addCell(new PdfPCell(
-                new Phrase(label, NORMAL_FONT)));
-        PdfPCell value = new PdfPCell(
-                new Phrase(formatAmount(amount), NORMAL_FONT));
+        table.addCell(new PdfPCell(new Phrase(label, NORMAL_FONT)));
+        PdfPCell value = new PdfPCell(new Phrase(format(amount), NORMAL_FONT));
         value.setHorizontalAlignment(Element.ALIGN_RIGHT);
         table.addCell(value);
     }
+
 
 
     private static void addFooter(Document document)
             throws DocumentException {
 
         document.add(Chunk.NEWLINE);
-        Paragraph footer = new Paragraph(
+
+
+        Paragraph thankYou = new Paragraph(
                 "Thank you for your business!",
                 FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 9));
-        footer.setAlignment(Element.ALIGN_CENTER);
-        document.add(footer);
+        thankYou.setAlignment(Element.ALIGN_CENTER);
+        document.add(thankYou);
+
+
+        Paragraph copyright = new Paragraph(
+                "© 2026 AlfinAkash. All rights reserved.",
+                FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 9));
+        copyright.setAlignment(Element.ALIGN_CENTER);
+        document.add(copyright);
     }
 
-    private static String formatAmount(double amount) {
-        return AMOUNT_FORMAT.format(amount);
+
+    private static String format(double value) {
+        return AMOUNT_FORMAT.format(value);
     }
 }
