@@ -48,6 +48,7 @@ Application will be available at:
 ```
 http://localhost:8080
 ```
+---
 
 ## Deployment
 
@@ -83,10 +84,13 @@ All API endpoints listed below can be accessed by replacing `http://localhost:80
 ### GetInvoicePDF
 ![Get Invoice PDF](images/GetInvoicePdfById.png)
 
+---
 
 ## Invoice PDF
 
 [Invoice Pdf](images/Invoice-Pdf.pdf)
+
+---
 
 # API Endpoints
 ## Create Invoice
@@ -187,7 +191,7 @@ All API endpoints listed below can be accessed by replacing `http://localhost:80
 - **Method:** `GET`  
 - **URL:** `http://localhost:8080/api/v1/invoices/{id}/pdf`
 
-
+---
 
 ## Configuration
 #### Application Properties
