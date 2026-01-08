@@ -15,6 +15,40 @@ A Spring Boot–based Invoice Generator application that provides REST APIs to c
 
 ---
 
+## Docker Support
+The application can be containerized and run using Docker.
+A Dockerfile is included in the repository.
+
+```
+docker build --no-cache -t alfinakash/invoice-generator:latest .
+```
+
+Push Docker Image to Docker Hub
+
+```
+docker login
+docker push alfinakash/invoice-generator:latest
+```
+
+Pull Docker Image from Docker Hub
+```
+docker pull alfinakash/invoice-generator:latest
+```
+
+Run Application Using Docker
+
+```
+docker run -p 8080:8080 \
+  -e MONGODB_URI=<your_mongodb_uri> \
+  alfinakash/invoice-generator:latest
+```
+
+Application will be available at:
+
+```
+http://localhost:8080
+```
+
 ## Deployment
 
 The backend service is deployed and publicly accessible.
@@ -31,30 +65,30 @@ All API endpoints listed below can be accessed by replacing `http://localhost:80
 
 ## Screenshots
 
-### Create Invoice
+### CreateInvoice
 ![Create Invoice](images/CreateInvoice.png)
 
-### Get All Invoice
-![Get All Invoice](images/GetAllInvoice.png)
+### GetAllInvoices
+![Get All Invoices](images/GetAllInvoice.png)
 
-### GetInvoiceById
-![Get Invoice By Id](images/GetInvoiceById.png)
+### GetInvoiceByID
+![Get Invoice By ID](images/GetInvoiceById.png)
 
-### UpdateInvoiceById
-![Get All Invoice](images/UpdateINvoiceById.png)
+### UpdateInvoiceByID
+![Update Invoice By ID](images/UpdateINvoiceById.png)
 
-### DeleteInvoiceById
-![Delete Invoice By Id](images/DeleteInvoiceById.png)
+### DeleteInvoiceByID
+![Delete Invoice By ID](images/DeleteInvoiceById.png)
 
-### GetInvoicePdfById
-![Get Invoice Pdf By Id](images/GetInvoicePdfById.png)
+### GetInvoicePDF
+![Get Invoice PDF](images/GetInvoicePdfById.png)
 
 
 ## Invoice PDF
 
 [Invoice Pdf](images/Invoice-Pdf.pdf)
 
-# Invoice Tested API
+# API Endpoints
 ## Create Invoice
 
 - **Method:** `POST`  
@@ -197,7 +231,7 @@ http://localhost:8080
 ---
 
 
-## 👤 Author
+## Author
 
 **[AlfinAkash](https://github.com/AlfinAkash)**  
 
