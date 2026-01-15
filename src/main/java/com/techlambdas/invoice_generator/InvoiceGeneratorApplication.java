@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class InvoiceGeneratorApplication {
 
 	public static void main(String[] args) {
+
+       System.out.println("MONGODB_URI from ENV = " + System.getenv("MONGODB_URI"));
+
 		SpringApplication.run(InvoiceGeneratorApplication.class, args);
 	}
 
