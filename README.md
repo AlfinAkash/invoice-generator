@@ -65,7 +65,8 @@ http://localhost:8080
 ```
 ### Manual command for Docker build and Push to hub
 
-```docker build --no-cache -t alfinakash/invoice-generator:latest .
+```
+docker build --no-cache -t alfinakash/invoice-generator:latest .
 ```
 
 ```
