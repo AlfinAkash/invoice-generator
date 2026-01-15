@@ -95,6 +95,29 @@ docker push alfinakash/invoice-generator:latest
 
 ## API Endpoints
 
+POST /api/v1/auth/register
+
+**Request Body:**
+```json
+{
+  "username": " ",
+  "password": " "
+}
+```
+
+POST /api/v1/auth/login
+
+Note: Use the returned token for all protected endpoints by adding it in the Authorization ````header as a Bearer token:````
+`Authorization: Bearer <JWT token here>`
+
+
+**Request Body:**
+```json
+{
+  "username": " ",
+  "password": " "
+}
+```
 POST `/api/v1/invoices`
 
 GET `/api/v1/invoices`
@@ -175,7 +198,3 @@ http://localhost:8080
 <!-- ## Author
 
 **[AlfinAkash](https://github.com/AlfinAkash)** -->
-
-
-
-
