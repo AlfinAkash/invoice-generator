@@ -1,6 +1,6 @@
 # Invoice Generator Application
 
-A Spring Boot–based Invoice Generator application that provides REST APIs to create, retrieve, and manage invoices using MongoDB. The application also supports PDF invoice generation.
+Invoice Generator Microservice: A Spring Boot service providing REST APIs to create, retrieve, and manage invoices using MongoDB. Supports dynamic PDF invoice generation and is container-ready for microservices deployment.
 
 ---
 
@@ -12,25 +12,40 @@ A Spring Boot–based Invoice Generator application that provides REST APIs to c
 * **Spring Data MongoDB**
 * **OpenPDF**: PDF generation
 * **Maven**: Build tool
+* **Docker**
+* **GitHub Actions (CI/CD)**
 
 ---
 
-## Docker Support
-The application can be containerized and run using Docker.
-A Dockerfile is included in the repository.
+## Docker & CI/CD Support
+
+This project uses **GitHub Actions** to automatically **build and push the Docker image to Docker Hub** whenever new code is pushed to the `main` branch.
+
+### Automated Workflow
+
+**Trigger:**  
+- Push to the `main` branch
+
+**Actions Performed:**  
+1. Checkout source code  
+2. Build Docker image  
+3. Push Docker image to Docker Hub
+
+### Docker Image Repository
 
 ```
-docker build --no-cache -t alfinakash/invoice-generator:latest .
+alfinakash/invoice-generator
 ```
 
-Push Docker Image to Docker Hub
+### Latest Tag
 
-```
+```bash
 docker login
 docker push alfinakash/invoice-generator:latest
 ```
 
-Pull Docker Image from Docker Hub
+### Pull Docker Image from Docker Hub
+
 ```
 docker pull alfinakash/invoice-generator:latest
 ```
@@ -56,31 +71,9 @@ http://localhost:8080
 |-------------|-------|
 | Environment | Production |
 | Status      | Live |
-| Base URL    | https://invoice-generator-backend-service.onrender.com |
+| Base URL    | **https://invoice-generator-backend-service.onrender.com** |
 
 > Replace `http://localhost:8080` with the production base URL when accessing APIs.
-
----
-
-## Screenshots
-
-### CreateInvoice
-![Create Invoice](images/CreateInvoice.png)
-
-### GetAllInvoices
-![Get All Invoices](images/GetAllInvoice.png)
-
-### GetInvoiceByID
-![Get Invoice By ID](images/GetInvoiceById.png)
-
-### UpdateInvoiceByID
-![Update Invoice By ID](images/UpdateINvoiceById.png)
-
-### DeleteInvoiceByID
-![Delete Invoice By ID](images/DeleteInvoiceById.png)
-
-### GetInvoicePDF
-![Get Invoice PDF](images/GetInvoicePdfById.png)
 
 ---
 
@@ -90,105 +83,43 @@ http://localhost:8080
 
 ---
 
-# API Endpoints
-## Create Invoice
+## API Endpoints
 
-- **Method:** `POST`  
-- **URL:** `http://localhost:8080/api/v1/invoices`
+POST `/api/v1/invoices`
 
-### Request Headers
+GET `/api/v1/invoices`
 
-- `Content-Type: application/json`
+GET `/api/v1/invoices/{id}`
 
-### Request Body
+PUT `/api/v1/invoices/{id}`
 
-```json
-{
-  "company": {
-    "name": "TechLambdas Pvt Ltd",
-    "address": "120, Market Rd, opposite to State Bank of India, Sevvalpatti, Kovilpatti, Tamil Nadu 628501",
-    "gstNumber": "GST123456"
-  },
-  "customer": {
-    "name": "AlfinAkash A",
-    "email": "alfinakash2001@gmail.com",
-    "address": "Tirunelveli"
-  },
-  "items": [
-    {
-      "itemName": "Laptop",
-      "quantity": 2,
-      "rate": 50000,
-      "taxPercentage": 18
-    },
-    {
-      "itemName": "Mouse",
-      "quantity": 5,
-      "rate": 500,
-      "taxPercentage": 18
-    }
-  ]
-}
-```
-## GetAll Invoice
+DELETE `/api/v1/invoices/{id}`
 
-- **Method:** `GET`  
-- **URL:** `http://localhost:8080/api/v1/invoices`
+GET `/api/v1/invoices/{id}/pdf`
 
 
-## Get Invoice ById
-
-- **Method:** `GET`  
-- **URL:** `http://localhost:8080/api/v1/invoices/{id}`
-
-
-## Update Invoice ById
-
-- **Method:** `PUT`  
-- **URL:** `http://localhost:8080/api/v1/invoices/{id}`
-
-### Request Body
+<!--
+- ### Request Body
 
 ```json
 {
   "company": {
-    "name": "TechLambdas Pvt Ltd",
-    "address": "120, Market Rd, opposite to State Bank of India, Sevvalpatti, Kovilpatti, Tamil Nadu 628501",
-    "gstNumber": "GST123456"
+    "name": "Zoho Corporation Private Limited",
+    "address": "DLF IT Park, Manapakkam, Chennai, Tamil Nadu 600089, India",
+    "gstNumber": "33AAACZ2890K1ZP"
   },
   "customer": {
     "name": "AlfinAkash A",
-    "email": "alfinakash2001@gmail.com",
-    "address": "Tirunelveli"
+    "email": "alfinakash@gmail.com",
+    "address": "Tirunelveli, Tamil Nadu, India"
   },
   "items": [
-    {
-      "itemName": "Laptop",
-      "quantity": 2,
-      "rate": 50000,
-      "taxPercentage": 18
-    },
-    {
-      "itemName": "Mouse",
-      "quantity": 5,
-      "rate": 500,
-      "taxPercentage": 18
-    }
+    { "itemName": "Zoho One Subscription (1 Year)", "quantity": 10, "rate": 4500, "taxPercentage": 18 }
   ]
 }
+
 ```
-
-## Delete Invoice ById
-
-- **Method:** `DELETE`  
-- **URL:** `http://localhost:8080/api/v1/invoices/{id}`
-
----
-## Get Invoice Pdf
-
-- **Method:** `GET`  
-- **URL:** `http://localhost:8080/api/v1/invoices/{id}/pdf`
-
+-->
 ---
 
 ## Configuration
@@ -204,10 +135,9 @@ springdoc.swagger-ui.path=/swagger-ui.html
 logging.level.org.springframework.web=INFO
 logging.level.org.springframework.data.mongodb=INFO
 invoice.pdf.title=INVOICE
-invoice.pdf.author=TechLambdas Pvt Ltd
+invoice.pdf.author=Azyrex
 
 ```
-
 
 ---
 
@@ -230,12 +160,12 @@ Application will start at:
 http://localhost:8080
 ```
 
----
 
 
-## Author
+<!-- ## Author
 
-**[AlfinAkash](https://github.com/AlfinAkash)**  
+**[AlfinAkash](https://github.com/AlfinAkash)** -->
+
 
 
 
