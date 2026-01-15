@@ -63,10 +63,11 @@ Application will be available at:
 ```
 http://localhost:8080
 ```
-### Manual Docker build and Push to hub
+### Manual command for Docker build and Push to hub
 
 ```docker build --no-cache -t alfinakash/invoice-generator:latest .
 ```
+
 ```
 docker push alfinakash/invoice-generator:latest
 ```
