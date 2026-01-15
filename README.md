@@ -95,7 +95,7 @@ docker push alfinakash/invoice-generator:latest
 
 ## API Endpoints
 
-POST /api/v1/auth/register
+POST `/api/v1/auth/register`
 
 **Request Body:**
 ```json
@@ -105,7 +105,7 @@ POST /api/v1/auth/register
 }
 ```
 
-POST /api/v1/auth/login
+POST `/api/v1/auth/login`
 
 Note: Use the returned token for all protected endpoints by adding it in the Authorization ````header as a Bearer token:````
 `Authorization: Bearer <JWT token here>`
